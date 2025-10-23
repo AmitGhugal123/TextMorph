@@ -1,0 +1,39 @@
+# --- Virtual environments ---
+venv/
+.venv/
+env/
+env.bak/
+venv.bak/
+textprojectvenv/
+textprojkectvenv/
+
+# --- Python cache & bytecode ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# --- Environment files ---
+.env
+.env/
+
+# --- Build artifacts ---
+build/
+dist/
+*.egg-info/
+
+# --- SQLite / Database files ---
+*.sqlite3
+instance/
+
+# --- IDE / Editor files ---
+.vscode/
+.idea/
+
+# --- Streamlit cache ---
+.streamlit/
+.streamlit-cache/
+
+# --- OS generated files ---
+.DS_Store
+Thumbs.db

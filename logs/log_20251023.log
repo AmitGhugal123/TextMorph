@@ -1,0 +1,8 @@
+2025-10-23 17:48:13 | INFO | This is an INFO message
+2025-10-23 17:48:13 | WARNING | This is a WARNING message
+2025-10-23 17:48:13 | ERROR | This is an ERROR message
+2025-10-23 17:48:13 | CRITICAL | This is a CRITICAL message
+2025-10-23 17:49:50 | INFO | This is an INFO message
+2025-10-23 17:49:50 | WARNING | This is a WARNING message
+2025-10-23 17:49:50 | ERROR | This is an ERROR message
+2025-10-23 17:49:50 | CRITICAL | This is a CRITICAL message

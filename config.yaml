@@ -1,0 +1,55 @@
+# ==============================================
+# NeoGlass MVP Configuration File — Finka Version
+# ==============================================
+
+project:
+  name: "NeoGlass — Chromatic Summarizer"
+  version: "1.0.0"
+  description: "Streamlit app for text summarization & paraphrasing using Hugging Face and GROQ APIs."
+
+# --------------------------
+# API CONFIGURATION
+# --------------------------
+api:
+  huggingface_api_key: ${HF_API_KEY}   # Set in .env
+  groq_api_key: ${GROQ_API_KEY}        # Set in .env
+
+  # Endpoints
+  hf_endpoint: "https://api-inference.huggingface.co/models"
+  groq_endpoint: "https://api.groq.com/openai/v1/chat/completions"
+
+  # Optional retry mechanism
+  retry_attempts: 3
+  retry_delay: 2  # seconds between retries
+
+# --------------------------
+# MODEL SETTINGS
+# --------------------------
+models:
+  summarization:
+    model_name: "facebook/bart-large-cnn"
+    temperature: 0.7
+    max_length: 250
+    return_multiple: false  # multiple summaries? true/false
+
+  paraphrasing:
+    model_name: "llama-3.1-8b-instant"
+    temperature: 0.9
+    max_tokens: 400
+    variations: 3           # number of paraphrased outputs
+
+# --------------------------
+# APP SETTINGS
+# --------------------------
+app:
+  debug: true
+  streamlit_port: 8501
+  theme: "chromatic"  # custom Streamlit theme
+
+# --------------------------
+# LOGGING CONFIGURATION
+# --------------------------
+logging:
+  level: "INFO"          # DEBUG, INFO, WARNING, ERROR
+  file: "logs/neoglass.log"
+  console: true          # also log to console

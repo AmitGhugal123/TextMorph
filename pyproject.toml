@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "summarize-paraphrase-mvp"
+version = "0.1.0"
+description = "Text summarization and paraphrasing project"
+authors = [
+    { name = "Amit Ghugal", email = "amitghugal1512@gmial.com" }
+]
+dependencies = [
+    "transformers",
+    "torch",
+    "nltk",
+    "networkx",
+    "pyyaml",
+    "streamlit",
+    "python-dotenv"
+]

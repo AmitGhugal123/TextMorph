@@ -1,0 +1,9 @@
+streamlit
+transformers
+torch
+nltk
+scikit-learn
+numpy
+sentencepiece
+protobuf
+python-dotenv
