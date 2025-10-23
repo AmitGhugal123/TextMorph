@@ -59,17 +59,34 @@ It integrates Hugging Face Transformer models and GROQ APIs into a seamless Stre
 
 summarize-paraphrase-mvp/
 │
-├── 📂 mvp/                  # Core summarization & paraphrasing logic
-│   ├── 📄 abstractive.py    # Abstractive summarization
-│   ├── 📄 extractive.py     # Extractive summarization
-│   ├── 📄 paraphraser.py    # Paraphrasing logic
-│   ├── 📄 mvp_pipeline.py   # Pipeline orchestrator
-│   └── 📄 logger.py         # Logging configuration
+├── 📂 config/                 # Configuration files
+│   ├── config.yml             # Main YAML configuration
+│   ├── config_loader.py       # Python loader to read config.yml
+│   └── test_config.py         # Test script for config
 │
-├── 📄 app.py                # Main Streamlit app entry
-├── 📄 config.yaml           # Model configuration
-├── 📄 requirements.txt      # Dependencies
-└── 📄 README.md             # Documentation
+├── 📂 logs/                   # Log files
+│   └── log_20251023.log
+│
+├── 📂 mvp/                    # Core application modules
+│   ├── __init__.py
+│   ├── abstractive.py         # Abstractive summarization
+│   ├── extractive.py          # Extractive summarization
+│   ├── logger.py              # Logging utilities
+│   ├── mvp_pipeline.py        # Main processing pipeline
+│   ├── paraphraser.py         # Paraphrasing module
+│   ├── test_logger.py         # Test logging
+│   └── test_run.py            # Test running pipeline
+│
+├── 📂 dist/                   # Distribution / build folder
+│
+├── .env                       # Environment variables for API keys
+├── .gitignore                 # Git ignore file
+├── app.py                     # Main app script
+├── ui_app.py                  # UI / Streamlit app
+├── pyproject.toml             # Project configuration for Python
+├── requirements.txt           # Dependencies
+└── README.md                  # Project README
+
 
 
 </pre>
