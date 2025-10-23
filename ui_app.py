@@ -10,7 +10,7 @@ load_dotenv()
 # Page config
 st.set_page_config(
     page_title="Text Summarizer & Paraphraser",
-    page_icon="📝",
+    page_icon="🧬",
     layout="wide"
 )
 
@@ -34,7 +34,7 @@ except Exception as e:
     st.stop()
 
 # Header
-st.title("📝 AI Text Summarizer & Paraphraser")
+st.title("🧬 AI Text Summarizer & Paraphraser")
 st.markdown("🚀 **Powered by Hugging Face API** - No model downloads required!")
 
 # Sidebar

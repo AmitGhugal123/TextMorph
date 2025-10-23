@@ -11,8 +11,8 @@ HF_API_KEY = os.getenv("HF_API_KEY")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 st.set_page_config(
-    page_title="NeoGlass — Colorful Summarizer",
-    page_icon="📝",
+    page_title="TextMorph – Advanced Text Summarization and Paraphrasing",
+    page_icon="🧬",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -246,8 +246,8 @@ st.markdown(
     "<div class='header-row'>"
     "<div style='display:flex;flex-direction:column;'>"
     "<div style='display:flex;align-items:center;gap:12px;'>"
-    "<div style='font-size:30px'>📝</div>"
-    "<div><div class='app-title'>NeoGlass — Chromatic Summarizer</div>"
+    "<div style='font-size:30px'>🧬</div>"
+    "<div><div class='app-title'>TextMorph – Advanced Text Summarization and Paraphrasing</div>"
     "<div class='muted'>Colorful background • glass UI • Hugging Face inference</div></div>"
     "</div>"
     "</div>"
@@ -346,7 +346,7 @@ with col2:
 # -------------------------
 st.markdown(
     '<div style="margin-top:20px;text-align:center;color:rgba(255,255,255,0.7);font-size:14px;">'
-    "Built with ♥ — NeoGlass UI • Hugging Face API"
+    "Built with 💜 —  TextMorph • Powered by Hugging Face"
     "</div>",
     unsafe_allow_html=True,
 )
