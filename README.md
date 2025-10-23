@@ -40,7 +40,7 @@ It integrates Hugging Face Transformer models and GROQ APIs into a seamless Stre
 | **Frontend** | Streamlit |
 | **Backend** | Python |
 | **AI/NLP** | Hugging Face Transformers, GROQ API |
-| **Configuration** | YAML, dotenv |
+| **Configuration** | dotenv |
 | **Logging** | Python logging module |
 | **Environment** | Virtualenv |
 
