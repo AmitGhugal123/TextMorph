@@ -3,24 +3,20 @@ from mvp.mvp_pipeline import SummarizationPipeline
 import os
 from dotenv import load_dotenv
 
-# -------------------------
 # Load env & page settings
-# -------------------------
 load_dotenv()
 HF_API_KEY = os.getenv("HF_API_KEY")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 st.set_page_config(
-    page_title="TextMorph – Advanced Text Summarization and Paraphrasing",
+    page_title="TextMorph - Advanced Text Summarization and Paraphrasing",
     page_icon="🧬",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
 
-# -------------------------
 # Streamlit-safe CSS + HTML
-# -------------------------
 CUSTOM_STYLE = r"""
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
@@ -214,9 +210,8 @@ textarea, .stTextArea textarea {
 
 st.markdown(CUSTOM_STYLE, unsafe_allow_html=True)
 
-# -------------------------
+
 # Helper: pipeline loader
-# -------------------------
 @st.cache_resource
 def get_pipeline():
     return SummarizationPipeline()
@@ -248,7 +243,7 @@ st.markdown(
     "<div style='display:flex;flex-direction:column;'>"
     "<div style='display:flex;align-items:center;gap:12px;'>"
     "<div style='font-size:30px'>🧬</div>"
-    "<div><div class='app-title'>TextMorph – Advanced Text Summarization and Paraphrasing</div>"
+    "<div><div class='app-title'>TextMorph - Advanced Text Summarization and Paraphrasing</div>"
     "<div class='muted'>Colorful background • glass UI • Hugging Face inference</div></div>"
     "</div>"
     "</div>"
@@ -281,6 +276,15 @@ with col1:
     st.markdown("<div class='neo-card'>", unsafe_allow_html=True)
     st.markdown("<div class='section-title'>📄 Input</div>", unsafe_allow_html=True)
     input_text = st.text_area("Paste the text to summarize or paraphrase", height=320, placeholder="Enter long article, notes, or meeting transcript...")
+
+    ##1st chnage 
+    # --- Input text stats ---
+    if input_text:
+        input_words = len(input_text.split())
+        input_chars = len(input_text)
+        st.caption(f"📝 **Input Stats:** {input_words} words | {input_chars} characters")
+
+
     st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
     c1, c2 = st.columns([1,1])
     with c1:
@@ -319,6 +323,18 @@ with col2:
                         else:
                             st.success("✅ Summary ready")
                             st.text_area("Summary", value=summary, height=320)
+                            #2nd change
+                            # --- Summary stats ---
+                            summary_words = len(summary.split())
+                            summary_chars = len(summary)
+                            st.caption(f"📊 **Summary Stats:** {summary_words} words | {summary_chars} characters")
+
+                            # Optional: show word reduction %
+                            reduction = ((len(input_text.split()) - summary_words) / len(input_text.split())) * 100
+                            st.info(f"🧾 Word Reduction: {reduction:.2f}%")
+
+
+
                             st.download_button("⬇️ Download Summary", data=summary, file_name="summary.txt", mime="text/plain")
                     except Exception as e:
                         st.error(f"Error generating summary: {str(e)}")
@@ -334,6 +350,13 @@ with col2:
                         else:
                             st.success("✅ Paraphrase ready")
                             st.text_area("Paraphrased Text", value=paraphrased, height=320)
+                            #3rd change
+                            # --- Paraphrased stats ---
+                            para_words = len(paraphrased.split())
+                            para_chars = len(paraphrased)
+                            st.caption(f"📊 **Paraphrased Stats:** {para_words} words | {para_chars} characters")
+
+
                             st.download_button("⬇️ Download Paraphrase", data=paraphrased, file_name="paraphrase.txt", mime="text/plain")
                     except Exception as e:
                         st.error(f"Error paraphrasing: {str(e)}")
@@ -342,9 +365,9 @@ with col2:
 
     st.markdown("</div>", unsafe_allow_html=True)
 
-# -------------------------
+
 # Footer
-# -------------------------
+
 st.markdown(
     '<div style="margin-top:20px;text-align:center;color:rgba(255,255,255,0.7);font-size:14px;">'
     "Built with 💜 —  TextMorph • Powered by Hugging Face"
