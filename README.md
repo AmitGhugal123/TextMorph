@@ -54,6 +54,22 @@ It integrates Hugging Face Transformer models and GROQ APIs into a seamless Stre
 
 ---
 
+## 🖥️ Live Interface Preview – TextMorph.
+</br>
+
+<img width="1895" height="1196" alt="Screenshot 2025-11-02 165252" src="https://github.com/user-attachments/assets/7cd405da-cbd9-4921-933c-377b714183aa" />
+</br>
+
+A clean and responsive interface for AI-powered text summarization and paraphrasing.
+
+Input and output sections for easy text handling
+
+Adjustable summarization method and length
+
+Real-time API status monitoring
+</br>
+---
+
 ## 📂 File Structure
 <pre>
 
