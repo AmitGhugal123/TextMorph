@@ -7,3 +7,5 @@ numpy
 sentencepiece
 protobuf
 python-dotenv
+pdfplumber
+python-docx

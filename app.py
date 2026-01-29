@@ -1,5 +1,7 @@
 import streamlit as st
 from mvp.mvp_pipeline import SummarizationPipeline
+from utils.file_reader import read_pdf, read_docx, read_txt
+
 import os
 from dotenv import load_dotenv
 
@@ -275,22 +277,59 @@ col1, col2 = st.columns([1.1, 1])
 with col1:
     st.markdown("<div class='neo-card'>", unsafe_allow_html=True)
     st.markdown("<div class='section-title'>📄 Input</div>", unsafe_allow_html=True)
-    input_text = st.text_area("Paste the text to summarize or paraphrase", height=320, placeholder="Enter long article, notes, or meeting transcript...")
 
-    ##1st chnage 
-    # --- Input text stats ---
+    # -------- File Upload --------
+    uploaded_file = st.file_uploader(
+        "📂 Upload a document (PDF, DOCX, TXT)",
+        type=["pdf", "docx", "txt"]
+    )
+
+    input_text = ""
+
+    if uploaded_file is not None:
+        try:
+            if uploaded_file.type == "application/pdf":
+                input_text = read_pdf(uploaded_file)
+            elif uploaded_file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+                input_text = read_docx(uploaded_file)
+            elif uploaded_file.type == "text/plain":
+                input_text = read_txt(uploaded_file)
+
+            st.success("✅ File uploaded and text extracted successfully")
+
+        except Exception as e:
+            st.error(f"❌ Failed to read file: {e}")
+
+    # -------- Manual Text Input --------
+    input_text = st.text_area(
+        "✍️ Or paste text manually",
+        value=input_text,
+        height=320,
+        placeholder="Enter long article, notes, or meeting transcript..."
+    )
+
+    # -------- Input Stats --------
     if input_text:
         input_words = len(input_text.split())
         input_chars = len(input_text)
         st.caption(f"📝 **Input Stats:** {input_words} words | {input_chars} characters")
 
-
     st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
-    c1, c2 = st.columns([1,1])
+
+    c1, c2 = st.columns([1, 1])
     with c1:
-        summarize_btn = st.button("✨ Summarize", use_container_width=True)
+        summarize_btn = st.button(
+    "✨ Summarize",
+    use_container_width=True,
+    key="summarize_btn"
+)
     with c2:
-        paraphrase_btn = st.button("🔄 Paraphrase", use_container_width=True)
+        paraphrase_btn = st.button(
+    "🔄 Paraphrase",
+    use_container_width=True,
+    key="paraphrase_btn"
+)
+
     st.markdown("</div>", unsafe_allow_html=True)
 
 with col2:
@@ -305,66 +344,74 @@ with col2:
     if paraphrase_btn:
         st.session_state.last_action = 'paraphrase'
 
+    # ❌ No input
     if not input_text:
         st.info("👈 Paste some text in the left panel and choose Summarize or Paraphrase.")
-        st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
-        st.write("Quick sample ideas to try:")
-        st.markdown("- Meeting notes (5-15 paragraphs)\n- Blog post draft\n- Research paper abstract + intro")
-    else:
-        if st.session_state.last_action == 'summarize':
-            if not pipeline_ready:
-                st.error("Summarization backend not available. Check API key and pipeline logs.")
-            else:
-                with st.spinner("Generating summary..."):
-                    try:
-                        summary = pipeline.summarize(input_text, method=method.lower(), length=length.lower())
-                        if isinstance(summary, str) and (summary.startswith("Error") or summary.startswith("API Error")):
-                            st.error(summary)
-                        else:
-                            st.success("✅ Summary ready")
-                            st.text_area("Summary", value=summary, height=320)
-                            #2nd change
-                            # --- Summary stats ---
-                            summary_words = len(summary.split())
-                            summary_chars = len(summary)
-                            st.caption(f"📊 **Summary Stats:** {summary_words} words | {summary_chars} characters")
+        st.stop()
 
-                            # Optional: show word reduction %
-                            reduction = ((len(input_text.split()) - summary_words) / len(input_text.split())) * 100
-                            st.info(f"🧾 Word Reduction: {reduction:.2f}%")
+    # 🔐 SMART VALIDATION
+    if len(input_text.split()) < 30:
+        st.warning("⚠️ Please provide at least 30 words for better results.")
+        st.stop()
 
-
-
-                            st.download_button("⬇️ Download Summary", data=summary, file_name="summary.txt", mime="text/plain")
-                    except Exception as e:
-                        st.error(f"Error generating summary: {str(e)}")
-        elif st.session_state.last_action == 'paraphrase':
-            if not pipeline_ready:
-                st.error("Paraphrase backend not available. Check API key and pipeline logs.")
-            else:
-                with st.spinner("Paraphrasing..."):
-                    try:
-                        paraphrased = pipeline.paraphrase(input_text)
-                        if isinstance(paraphrased, str) and (paraphrased.startswith("Error") or paraphrased.startswith("API Error")):
-                            st.error(paraphrased)
-                        else:
-                            st.success("✅ Paraphrase ready")
-                            st.text_area("Paraphrased Text", value=paraphrased, height=320)
-                            #3rd change
-                            # --- Paraphrased stats ---
-                            para_words = len(paraphrased.split())
-                            para_chars = len(paraphrased)
-                            st.caption(f"📊 **Paraphrased Stats:** {para_words} words | {para_chars} characters")
-
-
-                            st.download_button("⬇️ Download Paraphrase", data=paraphrased, file_name="paraphrase.txt", mime="text/plain")
-                    except Exception as e:
-                        st.error(f"Error paraphrasing: {str(e)}")
+    # -------- PROCESSING STARTS HERE --------
+    if st.session_state.last_action == 'summarize':
+        if not pipeline_ready:
+            st.error("Summarization backend not available. Check API key and pipeline logs.")
         else:
-            st.info("Press Summarize or Paraphrase after entering text.")
+            with st.spinner("Generating summary..."):
+                try:
+                    summary = pipeline.summarize(
+                        input_text,
+                        method=method.lower(),
+                        length=length.lower()
+                    )
+                    st.success("✅ Summary ready")
+                    st.text_area("Summary", value=summary, height=320)
+
+                    summary_words = len(summary.split())
+                    summary_chars = len(summary)
+                    st.caption(f"📊 **Summary Stats:** {summary_words} words | {summary_chars} characters")
+
+                    reduction = ((len(input_text.split()) - summary_words) / len(input_text.split())) * 100
+                    st.info(f"🧾 Word Reduction: {reduction:.2f}%")
+
+                    st.download_button(
+                        "⬇️ Download Summary",
+                        data=summary,
+                        file_name="summary.txt",
+                        mime="text/plain"
+                    )
+                except Exception as e:
+                    st.error(f"Error generating summary: {str(e)}")
+
+    elif st.session_state.last_action == 'paraphrase':
+        if not pipeline_ready:
+            st.error("Paraphrase backend not available. Check API key and pipeline logs.")
+        else:
+            with st.spinner("Paraphrasing..."):
+                try:
+                    paraphrased = pipeline.paraphrase(input_text)
+                    st.success("✅ Paraphrase ready")
+                    st.text_area("Paraphrased Text", value=paraphrased, height=320)
+
+                    para_words = len(paraphrased.split())
+                    para_chars = len(paraphrased)
+                    st.caption(f"📊 **Paraphrased Stats:** {para_words} words | {para_chars} characters")
+
+                    st.download_button(
+                        "⬇️ Download Paraphrase",
+                        data=paraphrased,
+                        file_name="paraphrase.txt",
+                        mime="text/plain"
+                    )
+                except Exception as e:
+                    st.error(f"Error paraphrasing: {str(e)}")
+
+    else:
+        st.info("Press Summarize or Paraphrase after entering text.")
 
     st.markdown("</div>", unsafe_allow_html=True)
-
 
 # Footer
 
